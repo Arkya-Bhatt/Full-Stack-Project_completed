@@ -52,11 +52,14 @@ def navbar() -> rx.Component:
         rx.mobile_and_tablet(
             rx.hstack(
                 rx.hstack(
-                    rx.image(
-                        src="\logo.jpg",
-                        width="2em",
-                        height="auto",
-                        border_radius="25%",
+                    rx.link(
+                        rx.image(
+                            src="\logo.jpg",
+                            width="2em",
+                            height="auto",
+                            border_radius="25%",
+                        ),
+                        href="/",
                     ),
                     rx.heading(
                         "Reflex", size="6", weight="bold"
