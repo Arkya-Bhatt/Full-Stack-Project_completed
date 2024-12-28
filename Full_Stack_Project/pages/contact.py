@@ -6,6 +6,12 @@ from .. import navigation
 
 from ..ui.base import base_page
 
+class ContactEntryModel(rx.Model, table=True):
+    first_name: str
+    last_name: str
+    email: str
+    message: str
+
 class ContactState(rx.State):
     form_data: dict = {}
     did_submit: bool = False
@@ -25,22 +31,35 @@ class ContactState(rx.State):
     # @rx.event
     async def handle_submit(self, form_data: dict):
         # """Handle the form submit."""
-        print(form_data)
+        # print(form_data)
         self.form_data = form_data
-        self.did_submit = True
-        yield
+        data = {}
+        for k,v in form_data.items():
+            if v == "" or v is None:
+                continue
+            data[k] = v
+        print(data)
+        with rx.session() as session:
+            db_entry = ContactEntryModel(
+                **data
+            )
+            session.add(db_entry)
+            session.commit()
+            self.did_submit = True
+            yield
+        
         await asyncio.sleep(2)
         self.did_submit = False
         yield
     
-    async def start_timer(self):
-        while self.timeleft > 0:
-            await asyncio.sleep(1)
-            self.timeleft -= 1
-            yield
+    # async def start_timer(self):
+    #     while self.timeleft > 0:
+    #         await asyncio.sleep(1)
+    #         self.timeleft -= 1
+    #         yield
 
 @rx.page(
-    on_load=ContactState.start_timer,
+    # on_load=ContactState.start_timer,
     route=navigation.routes.CONTACT_US_ROUTE,
 )
 
@@ -86,8 +105,8 @@ def contact_page() -> rx.Component:
                 reset_on_submit=False,
     )
     my_child = rx.vstack(
-            rx.heading("Contact", size="9"),
-            rx.text(ContactState.timeleft_label),
+            rx.heading("Contact Us", size="9"),
+            # rx.text(ContactState.timeleft_label),
             rx.cond(ContactState.did_submit, ContactState.thank_you, ""),
             rx.desktop_only(
                 rx.box(

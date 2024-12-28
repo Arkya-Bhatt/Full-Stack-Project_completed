@@ -4,3 +4,5 @@ __pycache__/
 *.py[cod]
 *.db
 venv/
+alembic/
+alembic.ini
