@@ -25,13 +25,14 @@ def navbar() -> rx.Component:
                         rx.heading(
                             "Reflex", size="7", weight="bold"
                         ),
-                        href="/",
+                        href=navigation.routes.HOME_ROUTE,
                     ),
                     align_items="center",
                 ),
                 rx.hstack(
                     navbar_link("Home", navigation.routes.HOME_ROUTE),
                     navbar_link("About", navigation.routes.ABOUT_US_ROUTE),
+                    navbar_link("Blog", navigation.routes.BLOG_POSTS_ROUTE),
                     navbar_link("Pricing", navigation.routes.PRICING_ROUTE),
                     navbar_link("Contact", navigation.routes.CONTACT_US_ROUTE),
                     spacing="5",
@@ -61,10 +62,13 @@ def navbar() -> rx.Component:
                             height="auto",
                             border_radius="25%",
                         ),
-                        href="/",
+                        href=navigation.routes.HOME_ROUTE,
                     ),
-                    rx.heading(
+                    rx.link(
+                        rx.heading(
                         "Reflex", size="6", weight="bold"
+                        ),
+                        href=navigation.routes.HOME_ROUTE,
                     ),
                     align_items="center",
                 ),
@@ -77,6 +81,8 @@ def navbar() -> rx.Component:
                             on_click=navigation.NavState.to_home),
                         rx.menu.item("About",
                             on_click=navigation.NavState.to_about_us),
+                        rx.menu.item("Blog",
+                            on_click=navigation.NavState.to_blog),
                         rx.menu.item("Pricing",
                             on_click=navigation.NavState.to_pricing),
                         rx.menu.item("Contact",

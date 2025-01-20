@@ -41,5 +41,5 @@ def contact_form() -> rx.Component:
                     rx.button("Submit", type="submit"),
                 ),
                 on_submit=ContactState.handle_submit,
-                reset_on_submit=False,
+                reset_on_submit=True,
     )
