@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from typing import Optional, List
 
 import reflex as rx
@@ -125,6 +127,14 @@ class BlogEditFormState(BlogPostState):
     form_data: dict = {}
     # post_content: str = ""
     
+    @rx.var
+    def publish_display_date(self) -> str:
+        return datetime.now().strftime("%Y-%m-%d")
+    
+    @rx.var
+    def publish_display_time(self) -> str:
+        return datetime.now().strftime("%H:%M:%S")
+    
     def handle_submit(self, form_data):
         self.form_data = form_data
         post_id = form_data.pop("post_id")
@@ -135,10 +145,16 @@ class BlogEditFormState(BlogPostState):
         if "publish_time" in form_data:
             publish_time = form_data.pop("publish_time")
         print(publish_date, publish_time)
+        publish_input_string = f"{publish_date} {publish_time}"
+        try:
+            final_publish_date = datetime.strptime(publish_input_string, "%Y-%m-%d %H:%M:%S")
+        except:
+            final_publish_date = None
         publish_active = False
         if "publish_active" in form_data:
             publish_active = form_data.pop("publish_active") == "on"
         updated_data = {**form_data}
         updated_data["publish_active"] = publish_active
+        updated_data["publish_date"] = final_publish_date
         self.save_post_edits(post_id, updated_data)
         return self.to_blog_post()
