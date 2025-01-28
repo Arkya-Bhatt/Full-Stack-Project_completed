@@ -59,7 +59,10 @@ class BlogPostState(rx.State):
     def load_posts(self):
         with rx.session() as session:
             result = session.exec(
-                select(BlogPostModel)
+                select(BlogPostModel).where(
+                    (BlogPostModel.publish_active == True) &
+                    (BlogPostModel.publish_date < datetime.now())
+                )
             ).all()
             self.posts = result
         # return
@@ -129,11 +132,19 @@ class BlogEditFormState(BlogPostState):
     
     @rx.var
     def publish_display_date(self) -> str:
-        return datetime.now().strftime("%Y-%m-%d")
+        if not self.post:
+            return datetime.now().strftime("%Y-%m-%d")
+        if not self.post.publish_date:
+            return datetime.now().strftime("%Y-%m-%d")
+        return self.post.publish_date.strftime("%Y-%m-%d")
     
     @rx.var
     def publish_display_time(self) -> str:
-        return datetime.now().strftime("%H:%M:%S")
+        if not self.post:
+            return datetime.now().strftime("%H:%M:%S")
+        if not self.post.publish_time:
+            return datetime.now().strftime("%H:%M:%S")
+        return self.post.publish_time.strftime("%H:%M:%S")
     
     def handle_submit(self, form_data):
         self.form_data = form_data
@@ -144,7 +155,7 @@ class BlogEditFormState(BlogPostState):
         publish_time = None
         if "publish_time" in form_data:
             publish_time = form_data.pop("publish_time")
-        print(publish_date, publish_time)
+        # print(publish_date, publish_time)
         publish_input_string = f"{publish_date} {publish_time}"
         try:
             final_publish_date = datetime.strptime(publish_input_string, "%Y-%m-%d %H:%M:%S")
