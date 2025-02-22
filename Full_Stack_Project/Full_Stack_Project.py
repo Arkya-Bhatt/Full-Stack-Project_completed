@@ -71,6 +71,10 @@ app.add_page(
 app.add_page(pages.about_page, 
             route=navigation.routes.ABOUT_US_ROUTE)
 
+app.add_page(pages.protected_page, 
+            route="/protected",
+            on_load=auth.SessionState.on_load,)
+
 app.add_page(pages.pricing_page,
             route=navigation.routes.PRICING_ROUTE)
 
