@@ -2,17 +2,10 @@ import reflex as rx
 
 from .nav import navbar
 
-def base_page(child: rx.Component, hide_navbar=False, *args, **kwargs) -> rx.Component:
-    # print([type(x) for x in args])
-    if not isinstance(child, rx.Component):
-        child = rx.heading("This is not a valid child element")
-    if hide_navbar:
-        return rx.container(
-        child,
-        rx.logo(),
-        rx.color_mode.button(position="bottom-left"),
-    )
-    return rx.fragment( # renders nada
+from .dashboard import base_dashboard_page
+
+def base_layout_component(child: rx.Component, *args, **kwargs) -> rx.Component:
+    rx.fragment( # renders nada
         navbar(),
         rx.box(
             child,
@@ -24,4 +17,15 @@ def base_page(child: rx.Component, hide_navbar=False, *args, **kwargs) -> rx.Com
         rx.logo(),
         rx.color_mode.button(position="bottom-left"),
         id="my-base-container",
+    )
+
+def base_page(child: rx.Component, *args, **kwargs) -> rx.Component:
+    # print([type(x) for x in args])
+    is_logged_in = True
+    if not isinstance(child, rx.Component):
+        child = rx.heading("This is not a valid child element")
+    return rx.cond(
+        is_logged_in,
+        base_dashboard_page(child, *args, **kwargs),
+        base_layout_component(child, *args, **kwargs),
     )
