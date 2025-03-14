@@ -1,6 +1,35 @@
 import reflex as rx
 
+from reflex.style import toggle_color_mode
+
 from .. import navigation
+
+def sidebar_dark_mode_toggle_item() -> rx.Component:
+    return rx.box(
+        rx.hstack(
+            rx.icon("moon"),
+            rx.text("Toggle Dark Mode", size="4"),
+            width="100%",
+            padding_x="0.5rem",
+            padding_y="0.75rem",
+            align="center",
+            style={
+                "_hover": {
+                    "cursor": "pointer",
+                    "bg": rx.color("accent", 4),
+                    "color": rx.color("accent", 11),
+                },
+                "color": rx.color("accent", 11),
+                "border-radius": "0.5em",
+            },
+        ),
+        on_click=toggle_color_mode,
+        # href=href,
+        as_="button",
+        underline="none",
+        weight="medium",
+        width="100%",
+    )
 
 def sidebar_item(
     text: str, icon: str, href: str
@@ -26,7 +55,6 @@ def sidebar_item(
         weight="medium",
         width="100%",
     )
-
 
 def sidebar_items() -> rx.Component:
     return rx.vstack(
@@ -66,9 +94,7 @@ def sidebar() -> rx.Component:
                 rx.spacer(),
                 rx.vstack(
                     rx.vstack(
-                        sidebar_item(
-                            "Settings", "settings", "/#"
-                        ),
+                        sidebar_dark_mode_toggle_item(),
                         sidebar_item(
                             "Log out", "log-out", "/#"
                         ),
