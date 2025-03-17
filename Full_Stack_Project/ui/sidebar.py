@@ -7,8 +7,19 @@ from .. import navigation
 def sidebar_dark_mode_toggle_item() -> rx.Component:
     return rx.box(
         rx.hstack(
-            rx.icon("moon"),
-            rx.text("Toggle Dark Mode", size="4"),
+            rx.color_mode_cond(
+                    light=rx.icon("moon"),
+                    dark=rx.icon("sun"),
+            ),
+            # rx.icon("moon"),
+            rx.text(
+                rx.color_mode_cond(
+                    light="Turn Dark Mode ON",
+                    dark="Turn Light Mode ON",
+                ),
+                size="4"
+            ),
+            # rx.text("Toggle Dark Mode", size="4"),
             width="100%",
             padding_x="0.5rem",
             padding_y="0.75rem",
