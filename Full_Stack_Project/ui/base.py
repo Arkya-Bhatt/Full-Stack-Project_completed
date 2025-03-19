@@ -1,5 +1,7 @@
 import reflex as rx
 
+# from ..auth.state import SessionState
+
 from .nav import navbar
 
 from .dashboard import base_dashboard_page
@@ -25,6 +27,7 @@ def base_page(child: rx.Component, *args, **kwargs) -> rx.Component:
     if not isinstance(child, rx.Component):
         child = rx.heading("This is not a valid child element")
     return rx.cond(
+        # SessionState.is_authenticated,
         is_logged_in,
         base_dashboard_page(child, *args, **kwargs),
         base_layout_component(child, *args, **kwargs),

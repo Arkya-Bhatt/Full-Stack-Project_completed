@@ -9,7 +9,7 @@ from ..ui.base import base_page
 from .forms import my_register_form
 
 def my_login_page() -> rx.Component:
-    
+    # from ..ui.base import base_page
     return base_page(
         rx.center(
             rx.cond(
@@ -21,7 +21,7 @@ def my_login_page() -> rx.Component:
     )
 
 def my_register_page() -> rx.Component:
-    
+    # from ..ui.base import base_page
     return base_page(
         rx.center(
             rx.cond(
