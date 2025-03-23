@@ -2,7 +2,70 @@ import reflex as rx
 
 from reflex.style import toggle_color_mode
 
+from ..auth.state import SessionState
+
 from .. import navigation
+
+def sidebar_user_item() -> rx.Component:
+    auth_user_info = SessionState.authenticated_user_info
+    return rx.hstack(
+            rx.icon_button(
+                rx.icon("user"),
+                size="3",
+                radius="full",
+            ),
+            rx.vstack(
+                rx.box(
+                    rx.text(
+                        "My account",
+                        size="3",
+                        weight="bold",
+                    ),
+                    rx.text(
+                        "user@reflex.dev",
+                        size="2",
+                        weight="medium",
+                    ),
+                width="100%",
+                ),
+                spacing="0",
+                align="start",
+                justify="start",
+                width="100%",
+            ),
+            padding_x="0.5rem",
+            align="center",
+            justify="start",
+            width="100%",
+        ),
+
+def sidebar_logout_item() -> rx.Component:
+    return rx.box(
+        rx.hstack(
+            rx.icon("log-out"),
+            rx.text("Log Out", size="4"),
+            # rx.text("Toggle Dark Mode", size="4"),
+            width="100%",
+            padding_x="0.5rem",
+            padding_y="0.75rem",
+            align="center",
+            style={
+                "_hover": {
+                    "cursor": "pointer",
+                    "bg": rx.color("accent", 4),
+                    "color": rx.color("accent", 11),
+                },
+                "color": rx.color("accent", 11),
+                "border-radius": "0.5em",
+            },
+        ),
+        on_click=navigation.NavState.to_logout,
+        # href=href,
+        as_="button",
+        underline="none",
+        weight="medium",
+        width="100%",
+    )
 
 def sidebar_dark_mode_toggle_item() -> rx.Component:
     return rx.box(
@@ -106,43 +169,12 @@ def sidebar() -> rx.Component:
                 rx.vstack(
                     rx.vstack(
                         sidebar_dark_mode_toggle_item(),
-                        sidebar_item(
-                            "Log out", "log-out", "/#"
-                        ),
+                        sidebar_logout_item(),
                         spacing="1",
                         width="100%",
                     ),
                     rx.divider(),
-                    rx.hstack(
-                        rx.icon_button(
-                            rx.icon("user"),
-                            size="3",
-                            radius="full",
-                        ),
-                        rx.vstack(
-                            rx.box(
-                                rx.text(
-                                    "My account",
-                                    size="3",
-                                    weight="bold",
-                                ),
-                                rx.text(
-                                    "user@reflex.dev",
-                                    size="2",
-                                    weight="medium",
-                                ),
-                                width="100%",
-                            ),
-                            spacing="0",
-                            align="start",
-                            justify="start",
-                            width="100%",
-                        ),
-                        padding_x="0.5rem",
-                        align="center",
-                        justify="start",
-                        width="100%",
-                    ),
+                    sidebar_user_item(),
                     width="100%",
                     spacing="5",
                 ),
@@ -179,49 +211,13 @@ def sidebar() -> rx.Component:
                             rx.spacer(),
                             rx.vstack(
                                 rx.vstack(
-                                    sidebar_item(
-                                        "Settings",
-                                        "settings",
-                                        "/#",
-                                    ),
-                                    sidebar_item(
-                                        "Log out",
-                                        "log-out",
-                                        "/#",
-                                    ),
+                                    sidebar_dark_mode_toggle_item(),
+                                    sidebar_logout_item(),
                                     width="100%",
                                     spacing="1",
                                 ),
                                 rx.divider(margin="0"),
-                                rx.hstack(
-                                    rx.icon_button(
-                                        rx.icon("user"),
-                                        size="3",
-                                        radius="full",
-                                    ),
-                                    rx.vstack(
-                                        rx.box(
-                                            rx.text(
-                                                "My account",
-                                                size="3",
-                                                weight="bold",
-                                            ),
-                                            rx.text(
-                                                "user@reflex.dev",
-                                                size="2",
-                                                weight="medium",
-                                            ),
-                                            width="100%",
-                                        ),
-                                        spacing="0",
-                                        justify="start",
-                                        width="100%",
-                                    ),
-                                    padding_x="0.5rem",
-                                    align="center",
-                                    justify="start",
-                                    width="100%",
-                                ),
+                                sidebar_user_item(),
                                 width="100%",
                                 spacing="5",
                             ),

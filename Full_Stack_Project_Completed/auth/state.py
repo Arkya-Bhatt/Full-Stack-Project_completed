@@ -10,19 +10,27 @@ class SessionState(reflex_local_auth.LocalAuthState):
     @rx.var(cache=True)
     def authenticated_user_info(self) -> UserInfo | None:
         if self.authenticated_user.id < 0:
-            return
+            return None
         with rx.session() as session:
-            return session.exec(
+            result = session.exec(
                 sqlmodel.select(UserInfo).where(
                     UserInfo.user_id == self.authenticated_user.id
                 ),
             ).one_or_none()
+            if result is None:
+                return None
+            print(result)
+            return result
             
     def on_load(self):
         if not self.is_authenticated:
             return reflex_local_auth.LoginState.redir
         print(self.is_authenticated)
         print(self.authenticated_user_info)
+    
+    def perform_logout(self):
+        self.do_logout()
+        return rx.redirect("/")
 
 class MyRegisterState(reflex_local_auth.RegistrationState):
     # This event handler must be named something besides `handle_registration`!!!
